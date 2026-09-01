@@ -1,0 +1,8 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "ignore": ["system/**"],
+  "ignoreIssues": {
+    "components/layout/index.ts": ["exports"],
+    "components/layout/SiteHeader/index.tsx": ["exports"]
+  }
+}
