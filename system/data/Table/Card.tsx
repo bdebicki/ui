@@ -1,3 +1,4 @@
+import { Card } from "@/components/ui/card";
 import { cn } from "../../lib/cn";
 
 type TableCardProps = {
@@ -8,13 +9,13 @@ type TableCardProps = {
 /** Scrollable card that frames a table. */
 export function TableCard({ children, className }: TableCardProps) {
   return (
-    <div
+    <Card
       className={cn(
-        "overflow-x-auto rounded-xl border border-zinc-200 bg-white",
+        "overflow-x-auto p-0 rounded-xl border border-zinc-200 bg-white",
         className,
       )}
     >
       {children}
-    </div>
+    </Card>
   );
 }

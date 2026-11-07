@@ -1,3 +1,6 @@
+"use client";
+
+import { Toggle } from "@/components/ui/toggle";
 import { variants } from "../../lib/variants";
 
 const toggleButton = variants({
@@ -28,9 +31,9 @@ export function ToggleButton({
   ...props
 }: ToggleButtonProps) {
   return (
-    <button
+    <Toggle
       type={type}
-      aria-pressed={active}
+      pressed={active}
       className={toggleButton({
         state: active ? tone : "inactive",
         className,
@@ -39,6 +42,6 @@ export function ToggleButton({
     >
       {icon}
       {children}
-    </button>
+    </Toggle>
   );
 }

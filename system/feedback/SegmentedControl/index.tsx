@@ -1,3 +1,7 @@
+"use client";
+
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { cn } from "../../lib/cn";
 import { Badge } from "../Badge";
 
@@ -55,15 +59,14 @@ export function SegmentedControl<T extends string>({
   return (
     <div className={cn(SCROLLER, className)}>
       <div className={ROW}>
+        <ToggleGroup type="single" value={value} onValueChange={(next) => { if (next) onChange(next as T); }} spacing={1} className="min-w-max gap-0 rounded-none">
         {pills.map((option) => {
           const isActive = option.value === value;
 
           return (
-            <button
+            <ToggleGroupItem
               key={option.value}
-              type="button"
-              onClick={() => onChange(option.value)}
-              aria-pressed={isActive}
+              value={option.value}
               className={cn(PILL, tone(isActive, option.highlighted))}
             >
               <span>{option.label}</span>
@@ -72,13 +75,15 @@ export function SegmentedControl<T extends string>({
                   {option.count}
                 </Badge>
               )}
-            </button>
+            </ToggleGroupItem>
           );
         })}
 
+        </ToggleGroup>
+
         {listed.length > 0 && (
           <div className="relative shrink-0">
-            <select
+            <NativeSelect
               aria-label={collapsedLabel}
               value={listedActive ? value : ""}
               onChange={(event) => onChange(event.target.value as T)}
@@ -87,23 +92,18 @@ export function SegmentedControl<T extends string>({
                 tone(listedActive),
               )}
             >
-              <option value="" disabled>
+              <NativeSelectOption value="" disabled>
                 {`${collapsedLabel} (${listed.length})`}
-              </option>
+              </NativeSelectOption>
               {listed.map((option) => (
-                <option key={option.value} value={option.value}>
+                <NativeSelectOption key={option.value} value={option.value}>
                   {option.count === undefined
                     ? option.label
                     : `${option.label} (${option.count})`}
-                </option>
+                </NativeSelectOption>
               ))}
-            </select>
-            <span
-              aria-hidden
-              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs leading-none text-zinc-400"
-            >
-              ▾
-            </span>
+            </NativeSelect>
+
           </div>
         )}
       </div>

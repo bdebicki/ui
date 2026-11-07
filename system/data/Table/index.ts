@@ -1,3 +1,4 @@
+import { TableBody, TableHeader, TableFooter, TableCell, TableHead, TableCaption } from "@/components/ui/table";
 import { TableCard } from "./Card";
 import { colFixed, colFlexible } from "./columns";
 import { TableColGroup } from "./ColGroup";
@@ -25,6 +26,12 @@ import { TableRowGroup } from "./RowGroup";
  */
 export const Table = Object.assign(TableRoot, {
   Card: TableCard,
+  Body: TableBody,
+  Header: TableHeader,
+  Footer: TableFooter,
+  Cell: TableCell,
+  Head: TableHead,
+  Caption: TableCaption,
   ColGroup: TableColGroup,
   HeaderRow: TableHeaderRow,
   Row: TableRow,

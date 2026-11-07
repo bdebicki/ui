@@ -1,5 +1,6 @@
 "use client";
 
+import { Input as ShadcnInput } from "@/components/ui/input";
 import { useEffect, useRef, useState } from "react";
 import { variants } from "../../lib/variants";
 import {
@@ -56,7 +57,7 @@ export function Input({
   }, [value]);
 
   return (
-    <input
+    <ShadcnInput
       value={localValue}
       onChange={(event) => {
         setLocalValue(event.target.value);

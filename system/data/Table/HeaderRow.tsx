@@ -1,3 +1,4 @@
+import { TableRow as ShadcnTableRow } from "@/components/ui/table";
 import { cn } from "../../lib/cn";
 import { TablePriorityStripeHeader } from "./PriorityStripe";
 
@@ -13,15 +14,16 @@ export function TableHeaderRow({
   ...props
 }: TableHeaderRowProps) {
   return (
-    <tr
+    <ShadcnTableRow
       className={cn(
         "bg-zinc-50 text-left text-xs uppercase tracking-wide text-zinc-500 [&>th]:align-top",
+        "border-0 last:border-0",
         className,
       )}
       {...props}
     >
       {stripe && <TablePriorityStripeHeader />}
       {children}
-    </tr>
+    </ShadcnTableRow>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { Textarea as ShadcnTextarea } from "@/components/ui/textarea";
 import { useEffect, useRef, useState } from "react";
 import { variants } from "../../lib/variants";
 import {
@@ -44,7 +45,7 @@ export function Textarea({
   }, [value]);
 
   return (
-    <textarea
+    <ShadcnTextarea
       rows={rows}
       value={localValue}
       onChange={(event) => {

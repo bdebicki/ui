@@ -1,3 +1,4 @@
+import { TableCell as ShadcnTableCell } from "@/components/ui/table";
 import { cn } from "../../lib/cn";
 
 type TablePrimaryCellProps = React.ComponentProps<"td"> & {
@@ -14,7 +15,7 @@ export function TablePrimaryCell({
   ...props
 }: TablePrimaryCellProps) {
   return (
-    <td
+    <ShadcnTableCell
       className={cn(
         "align-top",
         priority ? "bg-priority-50" : "bg-white",
@@ -25,6 +26,6 @@ export function TablePrimaryCell({
       {...props}
     >
       {children}
-    </td>
+    </ShadcnTableCell>
   );
 }

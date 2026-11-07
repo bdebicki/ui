@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+import { Breadcrumb as ShadcnBreadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { cn } from "../../lib/cn";
 
 /** root / category | segment / nested-segment */
@@ -14,14 +16,6 @@ type BreadcrumbProps = {
 
 const CRUMB = "text-xs font-medium uppercase tracking-wide";
 const SEP = "text-xs font-medium text-zinc-400";
-
-function Crumb({ label, active }: { label: string; active?: boolean }) {
-  return (
-    <span className={cn(CRUMB, active ? "text-primary-700" : "text-zinc-500")}>
-      {label}
-    </span>
-  );
-}
 
 function buildCrumbs(trail: BreadcrumbTrail) {
   const { root, category, segments = [] } = trail;
@@ -44,26 +38,24 @@ export function Breadcrumb({ trail, className }: BreadcrumbProps) {
   const crumbs = buildCrumbs(trail);
 
   return (
-    <nav aria-label="Breadcrumb" className={className}>
-      <ol className="flex flex-wrap items-center gap-x-1.5">
+    <ShadcnBreadcrumb aria-label="Breadcrumb" className={className}>
+      <BreadcrumbList className="gap-x-1.5 gap-y-0 sm:gap-1.5">
         {crumbs.map((crumb, index) => {
           const isLast = index === crumbs.length - 1;
-
           return (
-            <li
-              key={`${crumb.label}-${index}`}
-              className="flex items-center gap-x-1.5"
-            >
-              {crumb.sep && (
-                <span aria-hidden className={SEP}>
-                  {crumb.sep}
-                </span>
-              )}
-              <Crumb label={crumb.label} active={isLast} />
-            </li>
+            <Fragment key={`${crumb.label}-${index}`}>
+              {crumb.sep && <BreadcrumbSeparator className={SEP}>{crumb.sep}</BreadcrumbSeparator>}
+              <BreadcrumbItem>
+                {isLast ? (
+                  <BreadcrumbPage className={cn(CRUMB, "text-primary-700")}>{crumb.label}</BreadcrumbPage>
+                ) : (
+                  <span className={cn(CRUMB, "text-zinc-500")}>{crumb.label}</span>
+                )}
+              </BreadcrumbItem>
+            </Fragment>
           );
         })}
-      </ol>
-    </nav>
+      </BreadcrumbList>
+    </ShadcnBreadcrumb>
   );
 }

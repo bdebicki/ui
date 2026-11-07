@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { forwardRef } from "react";
 import { variants } from "../../lib/variants";
 
@@ -24,7 +25,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     ref,
   ) {
     return (
-      <button
+      <Button variant="unstyled" size="unstyled"
         ref={ref}
         type={type}
         title={label}

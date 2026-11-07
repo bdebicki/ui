@@ -1,3 +1,4 @@
+import { TableRow as ShadcnTableRow } from "@/components/ui/table";
 import { cn } from "../../lib/cn";
 import { TablePriorityStripe } from "./PriorityStripe";
 
@@ -18,7 +19,7 @@ export function TableRow({
   ...props
 }: TableRowProps) {
   return (
-    <tr
+    <ShadcnTableRow
       className={cn(
         "border-b border-zinc-100 last:border-b-0 [&>td]:align-top",
         priority && "bg-priority-50/60 hover:bg-priority-50/80",
@@ -30,6 +31,6 @@ export function TableRow({
         <TablePriorityStripe active={priority} rowSpan={stripeRowSpan} />
       )}
       {children}
-    </tr>
+    </ShadcnTableRow>
   );
 }

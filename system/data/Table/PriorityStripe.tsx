@@ -1,3 +1,4 @@
+import { TableCell, TableHead } from "@/components/ui/table";
 import { cn } from "../../lib/cn";
 
 /** Width of the sticky priority stripe — keep in sync with PrimaryCell `left-*` offset. */
@@ -16,7 +17,7 @@ type PriorityStripeProps = {
 /** Sticky left edge accent — stays visible when the table scrolls horizontally. */
 export function TablePriorityStripe({ active, rowSpan }: PriorityStripeProps) {
   return (
-    <td
+    <TableCell
       rowSpan={rowSpan}
       aria-hidden={!active}
       className={cn(stripeBase, active ? "bg-priority-500" : "bg-transparent")}
@@ -27,7 +28,7 @@ export function TablePriorityStripe({ active, rowSpan }: PriorityStripeProps) {
 /** Header spacer matching {@link TablePriorityStripe} column width. */
 export function TablePriorityStripeHeader() {
   return (
-    <th
+    <TableHead
       aria-hidden
       className={cn(
         stripeBase,

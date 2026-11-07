@@ -1,3 +1,4 @@
+import { Card as ShadcnCard } from "@/components/ui/card";
 import Link from "next/link";
 import { cn } from "../../lib/cn";
 import { variants } from "../../lib/variants";
@@ -26,11 +27,13 @@ type CardProps = {
 export function Card({ children, size, href, className }: CardProps) {
   if (href) {
     return (
-      <Link href={href} className={card({ size, className: cn(CARD_LINK, className) })}>
-        {children}
-      </Link>
+      <ShadcnCard asChild className={card({ size, className: cn(CARD_LINK, className) })}>
+        <Link href={href}>
+          {children}
+        </Link>
+      </ShadcnCard>
     );
   }
 
-  return <div className={card({ size, className })}>{children}</div>;
+  return <ShadcnCard className={card({ size, className })}>{children}</ShadcnCard>;
 }

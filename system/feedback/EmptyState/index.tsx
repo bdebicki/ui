@@ -1,3 +1,4 @@
+import { Empty } from "@/components/ui/empty";
 import { variants } from "../../lib/variants";
 
 const emptyState = variants({
@@ -5,7 +6,7 @@ const emptyState = variants({
   variants: {
     variant: {
       solid: "border-zinc-200 bg-white px-4 py-6 text-zinc-500",
-      dashed: "border-dashed border-zinc-200 py-8 text-zinc-400",
+      dashed: "border-dashed border-zinc-200 bg-transparent px-0 py-8 text-zinc-400",
     },
   },
   defaults: { variant: "solid" },
@@ -18,5 +19,5 @@ type EmptyStateProps = {
 };
 
 export function EmptyState({ children, variant, className }: EmptyStateProps) {
-  return <p className={emptyState({ variant, className })}>{children}</p>;
+  return <Empty className={emptyState({ variant, className })}>{children}</Empty>;
 }

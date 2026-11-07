@@ -1,3 +1,4 @@
+import { Table as ShadcnTable } from "@/components/ui/table";
 import { cn } from "../../lib/cn";
 
 type TableRootProps = React.ComponentProps<"table"> & {
@@ -11,7 +12,7 @@ export function TableRoot({
   ...props
 }: TableRootProps) {
   return (
-    <table
+    <ShadcnTable
       data-linked-table={linked ? "" : undefined}
       className={cn(
         "w-full min-w-full border-collapse text-sm [&_td]:align-top [&_th]:align-top",
