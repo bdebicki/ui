@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { AddButton, Badge, Button, Card, CreatableSelect, EmptyState, IconButton, Input, NumberInput, SegmentedControl, Table, Textarea, ToggleButton } from "@/system";
 
+import { Card as PrimitiveCard, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
+
 export default function ComponentsFixture() {
   const [ready, setReady] = useState(false);
   useEffect(() => { setReady(true); }, []);
@@ -24,6 +27,8 @@ export default function ComponentsFixture() {
         </div>
       </Card>
       <Card href="/about">Linked card</Card>
+      <PrimitiveCard data-testid="composed-card"><CardHeader data-testid="composed-header">Tytuł karty</CardHeader><CardContent data-testid="composed-content">Treść karty</CardContent><CardFooter data-testid="composed-footer">Stopka karty</CardFooter></PrimitiveCard>
+      <Dialog><DialogTrigger asChild><Button>Otwórz dialog</Button></DialogTrigger><DialogContent><DialogTitle>Test ramek</DialogTitle><DialogDescription>Spójny kolor obramowania.</DialogDescription></DialogContent></Dialog>
       <Input aria-label="Buffered input" value={text} onChange={(event) => setText(event.target.value.toUpperCase())} />
       <Textarea aria-label="Buffered textarea" value={notes} onChange={(event) => setNotes(event.target.value.toUpperCase())} />
       <NumberInput aria-label="Number" min={2} value={number} onValueChange={setNumber} />

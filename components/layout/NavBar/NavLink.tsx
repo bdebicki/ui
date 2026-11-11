@@ -9,7 +9,7 @@ const navLink = variants({
         "text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100",
       "secondary-idle":
         "text-zinc-600 group-hover/navgroup:text-zinc-100 group-data-[active]/navgroup:text-zinc-200 hover:bg-zinc-800 hover:text-zinc-100 group-data-[active]/navgroup:hover:bg-primary-700 group-data-[active]/navgroup:hover:text-white",
-      active: "bg-primary-600 text-white",
+      active: "bg-primary text-primary-foreground",
     },
   },
   defaults: { appearance: "primary-idle" },

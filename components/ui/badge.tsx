@@ -10,7 +10,7 @@ const badgeVariants = cva(
       neutral: "bg-zinc-100 text-zinc-700",
       muted: "bg-zinc-200/80 text-zinc-600",
       quiet: "bg-zinc-100 text-zinc-500",
-      primary: "bg-primary-600 text-white",
+      primary: "bg-primary text-primary-foreground",
       priority: "bg-priority-100 text-priority-700",
       platinum: "bg-platinum-100 text-platinum-700",
     },

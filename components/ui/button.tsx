@@ -7,8 +7,8 @@ const buttonVariants = cva(
   "rounded-lg text-sm transition disabled:cursor-not-allowed disabled:opacity-40",
   { variants: {
     variant: {
-      default: "bg-primary-500 font-medium text-white hover:bg-primary-600",
-      primary: "bg-primary-500 font-medium text-white hover:bg-primary-600",
+      default: "bg-primary font-medium text-primary-foreground hover:bg-primary-800",
+      primary: "bg-primary font-medium text-primary-foreground hover:bg-primary-800",
       secondary: "border border-zinc-200 text-zinc-600 hover:bg-zinc-50",
       ghost: "text-zinc-400 hover:text-zinc-700",
       outline: "border border-zinc-200 text-zinc-600 hover:bg-zinc-50",

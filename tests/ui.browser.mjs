@@ -50,13 +50,28 @@ try {
     }, { property, expected });
     expect(colors[0]).toEqual(colors[1]);
   }
-  for (const width of [1280, 390]) {
+  for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto(`${base}/ui-regression`);
     await expect(page.getByTestId("fixture")).toHaveAttribute("data-ready", "true");
     await expect(page.getByRole("button", { name: "Primary", exact: true })).toHaveCSS("border-radius", "8px");
     await expect(page.getByRole("button", { name: "Primary", exact: true })).toHaveCSS("padding-top", "6px");
-    await expectColor(page.getByRole("button", { name: "Primary", exact: true }), "backgroundColor", "oklch(0.696 0.17 162.48)");
+    await expectColor(page.getByRole("button", { name: "Primary", exact: true }), "backgroundColor", "oklch(0.508 0.118 165.612)");
+    const navbar = page.getByRole("navigation", { name: "Nawigacja aplikacji" });
+    expect((await navbar.boundingBox()).height).toBe(40);
+    const navContainer = await navbar.locator(":scope > div").boundingBox();
+    expect(navContainer.width).toBe(Math.min(width, 1152));
+    expect(navContainer.x).toBe(Math.max(0, (width - 1152) / 2));
+    const cardBox = await page.getByTestId("composed-card").boundingBox();
+    for (const id of ["composed-header", "composed-content", "composed-footer"]) {
+      const section = page.getByTestId(id);
+      const box = await section.boundingBox();
+      expect(box.x - cardBox.x).toBe(17); // 16 px padding + border, no nested side padding.
+      await expect(section).toHaveCSS("padding-left", "0px");
+    }
+    await page.getByRole("button", { name: "Otwórz dialog" }).click();
+    await expectColor(page.getByRole("dialog"), "borderTopColor", "#e4e4e7");
+    await page.getByRole("button", { name: "Close", exact: true }).click();
     await expect(page.locator('[data-slot="card"]').first()).toHaveCSS("padding-top", "24px");
     await expect(page.locator('[data-slot="card"]').first()).toHaveCSS("border-radius", "16px");
     await expect(page.locator('[data-slot="card"]').first()).toHaveCSS("box-shadow", "none");
