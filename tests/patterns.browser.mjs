@@ -5,8 +5,11 @@ export async function patternChecks({ page, browser, base }) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto(base);
     await page.getByRole("button", { name: "Przywróć przykładowe dane", exact: true }).click();
-    const table = page.getByRole("table", { name: "Przykładowe wpisy" });
-    await expect(table.getByRole("row")).toHaveCount(4);
+    const table = page.getByRole("table", { name: /^Wpisy:/ });
+    const rows = table.locator("tbody tr");
+    await expect(rows).toHaveCount(3);
+    await expect(page.getByRole("region", { name: "Elektronika", exact: true }).getByRole("heading", { level: 2 })).toContainText("Elektronika");
+    await expect(table.getByRole("columnheader", { name: "Kategoria", exact: true })).toHaveCount(0);
     expect(await page.locator("select, datalist").count()).toBe(0);
     const add = page.getByRole("button", { name: "Dodaj wpis", exact: true });
     await add.click();
@@ -41,7 +44,7 @@ export async function patternChecks({ page, browser, base }) {
     await expect(form).toHaveCount(0);
     await expect(add).toBeFocused();
     await page.reload();
-    let row = table.getByRole("row").filter({ hasText: title });
+    let row = rows.filter({ hasText: title });
     await expect(row).toBeVisible();
     await expect(row).not.toContainText("Pełna notatka");
 
@@ -58,7 +61,8 @@ export async function patternChecks({ page, browser, base }) {
     await editCategory.fill("Ele");
     await page.getByRole("option", { name: "Elektronika", exact: true }).click();
     await edit.getByRole("button", { name: "Zapisz", exact: true }).click();
-    await expect(row).toContainText("Elektronika");
+    await expect(page.getByRole("region", { name: "Elektronika", exact: true }).getByRole("row").filter({ hasText: title })).toBeVisible();
+    await expect(page.getByRole("region", { name: "Nowa kategoria", exact: true })).toHaveCount(0);
 
     const filter = page.getByRole("combobox", { name: "Filtr kategorii" });
     await filter.click();
@@ -68,7 +72,8 @@ export async function patternChecks({ page, browser, base }) {
     await expect(filter).toHaveValue("Wszystkie kategorie");
     await filter.click();
     await page.getByRole("option", { name: "Elektronika", exact: true }).click();
-    await expect(table.getByRole("row")).toHaveCount(3);
+    await expect(rows).toHaveCount(2);
+    await expect(table).toHaveCount(1);
     await page.getByRole("button", { name: "Wyczyść filtry", exact: true }).click();
     await page.getByLabel("Wyszukiwanie", { exact: true }).fill("nieistniejący wpis");
     await expect(page.getByText("Brak wyników dla wybranych filtrów.")).toBeVisible();

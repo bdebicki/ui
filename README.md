@@ -5,7 +5,7 @@ Szablon aplikacji Next.js: design system w `system/` plus powłoka (navbar, head
 ## Wzorce produktu
 
 [PATTERNS.md](PATTERNS.md) opisuje, jak składać aplikacje z tych komponentów:
-zwarte listy/tabele, dodawanie i edycję w modalu, listy opcji na szerokość pola,
+kategorie rozdzielające grupy tabel lub kart jedna pod drugą, modale i listy opcji,
 wspólną powłokę, informację o zapisie oraz zachowanie sesji i powrotu z tła.
 Rozróżnia gotowe elementy od wzorców, które trzeba dopiero zaimplementować.
 
@@ -47,9 +47,11 @@ wdrożenia na wielu instancjach wymagają wspólnego licznika.
 
 ## Działający przykład i gotowe wzorce
 
-Strona `/` pokazuje zwartą tabelę z wyszukiwaniem, filtrami kategorii/statusu,
+Strona `/` pokazuje grupy wpisów z nagłówkami kategorii i osobną tabelą w każdej grupie,
+z wyszukiwaniem, filtrami kategorii/statusu,
 małymi miniaturami, szybką zmianą statusu, dodawaniem/edycją w modalu
-i potwierdzeniem usuwania. Na telefonie kategoria i status trafiają pod nazwę;
+i potwierdzeniem usuwania. Na telefonie status trafia pod nazwę;
+kategoria pozostaje nagłówkiem grupy,
 akcje pozostają dostępne. Dane przykładu są zapisywane tylko w bieżącej przeglądarce.
 
 W kodzie aplikacji używaj eksportów `@/system`:
@@ -66,6 +68,8 @@ W kodzie aplikacji używaj eksportów `@/system`:
   Sam ustawia focus na pierwszym polu — nie dodawaj `autoFocus` do dzieci.
 - `ConfirmDialog`: wspólne potwierdzenie z `onConfirm` (także async), obsługą błędu
   i blokadą na czas operacji. Używaj zamiast natywnego `confirm()`.
+- `CategorySection`: nagłówek kategorii z licznikiem; zawartością może być tabela
+  albo lista kart jedna pod drugą.
 - `Table`: istniejąca kompozycja tabeli. Przykład responsywnego użycia wraz
   z edytorem znajduje się w `components/examples/PatternExample.tsx`.
 

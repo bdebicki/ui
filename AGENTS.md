@@ -8,7 +8,8 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 Przy budowaniu lub zmienianiu interfejsu przeczytaj [PATTERNS.md](PATTERNS.md).
 Dotyczy wszystkich ekranów w tym repo i projektach tworzonych z tego szablonu.
-Domyślnie: zwarta lista/tabela, dodawanie i pełna edycja w modalu,
+Kategorie są nagłówkami grup. W grupie używaj tabeli albo kart jedna pod drugą,
+zależnie od danych. Dodawanie i pełna edycja odbywają się w modalu;
 własna lista opcji na szerokość pola oraz ochrona edycji przy powrocie z tła.
 Dokument rozróżnia gotowe komponenty od wzorców wymagających implementacji.
 Nie przebudowuj istniejącej aplikacji poza zakresem zadania tylko z powodu tych zasad.

@@ -8,3 +8,4 @@ export {
   useLinkedTable,
   type TableColumnRole,
 } from "./Table";
+export { CategorySection } from "./CategorySection";

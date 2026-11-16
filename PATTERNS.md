@@ -15,38 +15,44 @@ na przebudowę całej istniejącej aplikacji przy drobnym zadaniu.
 - **Dostępne wzorce:** FormDialog (zapis, błędy, odrzucenie zmian), ConfirmDialog,
   Select (wybór istniejącej wartości), CreatableSelect (także nowa wartość).
   Oba pola korzystają z jednej listy ChoiceField. Strona `/` pokazuje cały przepływ
-  na zwartej tabeli; przykładowe dane zapisują się lokalnie w przeglądarce.
+  na tabelach pogrupowanych kategoriami; przykładowe dane zapisują się lokalnie w przeglądarce.
 - **Do integracji w aplikacji:** reakcja formularza na 401 i zachowanie szkicu,
   odświeżanie po powrocie z tła i konflikty zapisu.
 
 Dokument jest kierunkiem rozwoju, nie deklaracją, że wszystkie aplikacje już
 spełniają te zasady. Nie kopiuj rozwiązania z aplikacji tylko dlatego, że istnieje.
 
-## 1. Lista danych: zwarte wiersze jako domyślny widok
+## 1. Kategorie rozdzielają listy; układ wpisów zależy od danych
 
-Listy zakupów, ogłoszeń, planów i postępów pokazuj jako zwartą listę lub tabelę.
-Użytkownik ma szybko skanować wiele wpisów i porównywać ich wartości.
+Kategorię pokazuj jako nagłówek nad grupą wpisów, pomiędzy kolejnymi listami.
+Pod nagłówkiem znajduje się tabela albo karty jedna pod drugą. Nie wymuszamy
+jednego sposobu prezentacji we wszystkich aplikacjach.
 
-- Gdy dane mają porównywalne kolumny, używaj semantycznej tabeli i `Table` z `@/system`.
-- Dla prostych wpisów dopuszczalna jest semantyczna lista ze wspólnym układem wiersza.
-  Nie buduj drugiego wyglądu pojedynczego rekordu jako dużej karty.
-- Kolejność informacji: nazwa, istotne wartości/kategoria, status, akcje.
-  Kolumny wynikają z domeny — nie muszą być identyczne w każdej aplikacji.
-- Obrazek jest małą opcjonalną miniaturą. Duży obrazek i pełny opis trafiają
-  do szczegółów lub formularza w modalu, nie dominują w liście.
-- Wspieraj grupowanie, np. po kategorii, bez zmiany każdego wpisu w osobny panel.
-- Nie dodawaj domyślnie siatki kart ani przełącznika karty/tabela.
-  Galeria jest osobnym wzorcem dla zadania polegającego na oglądaniu obrazów;
-  wymaga wyraźnej potrzeby, nie samej obecności zdjęć w rekordach.
+- **Tabela** służy porównywaniu wartości w kolumnach, licznikom i gęstym danym,
+  jak w raidzie. Używaj semantycznej tabeli i `Table` z `@/system`.
+- **Karty jedna pod drugą** służą wpisom z różnymi szczegółami i zestawami akcji,
+  jak w listing-managerze. Jedna karta to jeden wpis, na pełną szerokość listy.
+  Karty są pełnoprawnym wzorcem, nie wyjątkiem od tabeli.
+- Wspólnym elementem jest `CategorySection` z `@/system`: nagłówek kategorii,
+  licznik wpisów i zawartość grupy. Nie narzuca tabeli ani kart.
+- Kategorii nie powtarzaj domyślnie w kolumnie tabeli ani jako etykiety każdego
+  wpisu. Kategorie są strukturą ekranu; filtr kategorii jest dodatkowym narzędziem.
+- Wpisy bez kategorii trafiają do grupy „Bez kategorii”. Puste grupy pomijaj,
+  także po filtrowaniu. Wyszukiwanie i filtry działają na wszystkie grupy.
+- Nazwa, status i akcje mają być łatwe do znalezienia. Zakres szczegółów
+  i rozmiar miniatury dobieraj do zadania i typu listy.
+- Siatka dużych kafelków nie jest domyślnym zamiennikiem listy. Galeria ma sens
+  wtedy, gdy zadanie polega na oglądaniu obrazów; nie wynika z samego posiadania zdjęć.
+- Nie dodawaj przełącznika tabela/karty bez konkretnej potrzeby użytkownika.
+  Wybierz właściwy układ dla danego przypadku.
 
-Na telefonie zachowaj zwarty widok: nazwa, status i najważniejsza akcja zostają
-widoczne, dane drugorzędne mogą przejść do drugiej linii lub szczegółów.
-Złożona tabela liczników może przewijać się poziomo we własnym obszarze;
-cała strona nie może rozszerzać się poza ekran. Zachowaj dostęp do nazwy rekordu.
-Nie stosuj ukrywania kolumn, które usuwa jedyną możliwość wykonania operacji.
+Na telefonie zachowaj czytelność nazwy, statusu i akcji. Karty pozostają jedną
+kolumną. W tabeli dane drugorzędne mogą przejść pod nazwę; złożona tabela liczników
+może przewijać się poziomo we własnym obszarze. Cała strona nie może się rozszerzać
+poza ekran. Nagłówki kategorii pozostają nad grupami na każdej szerokości.
 
-Punkt startu: `system/data/Table/`, `Table.Card`, `Table.PrimaryCell`.
-`Table.Card` to wspólna obudowa tabeli, nie zalecenie robienia kart rekordów.
+Punkty startu: `CategorySection`, `Table` i `Card` z `@/system`.
+`Table.Card` jest obudową tabeli, a `Card` może być pojedynczym wpisem listy.
 
 ## 2. Dodawanie i pełna edycja: modal
 

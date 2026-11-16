@@ -3,7 +3,7 @@
 import { useMemo, useState, useSyncExternalStore } from "react";
 import { Blocks, Check, Headphones, Package, Pencil, Plus, RotateCcw, Trash2, Watch } from "lucide-react";
 import { SetSiteHeader } from "../layout/SiteHeader";
-import { Badge, Button, ConfirmDialog, CreatableSelect, EmptyState, ErrorMessage, FormDialog, IconButton,
+import { Badge, Button, CategorySection, ConfirmDialog, CreatableSelect, EmptyState, ErrorMessage, FormDialog, IconButton,
   Input, PageContainer, SearchInput, Select, Table, Textarea } from "@/system";
 
 type Item = { id: string; title: string; category: string; notes: string; done: boolean; version: number; icon?: string };
@@ -82,6 +82,10 @@ export function PatternExample() {
   const filtered = items.filter(item => (!search || `${item.title} ${item.notes} ${item.category}`.toLocaleLowerCase("pl").includes(search)) &&
     (categoryFilter === "all" || (categoryFilter === "none" ? !item.category : categoryKey(item.category) === categoryKey(activeCategory))) &&
     (status === "all" || (status === "done" ? item.done : !item.done)));
+  const groups = [...categories, ""].map(category => ({
+    category,
+    items: filtered.filter(item => categoryKey(item.category) === categoryKey(category)),
+  })).filter(group => group.items.length > 0);
   function clearFilters() { setQuery(""); setCategoryFilter("all"); setStatus("all"); }
   function change(item: Item, update: (current: Item[]) => Item[]) {
     const current = readItems(snapshot());
@@ -91,7 +95,7 @@ export function PatternExample() {
     store(update(current));
   }
   return <PageContainer>
-    <SetSiteHeader title="Przykładowa lista" description="Zwarte wiersze, szybkie akcje i edycja w modalu."
+    <SetSiteHeader title="Przykładowa lista" description="Kategorie rozdzielają listy. Wpisy edytujesz w modalu."
       action={<Button onClick={() => setForm({ item: null })} disabled={!!data.error} className="inline-flex items-center gap-1.5"><Plus className="size-4" />Dodaj wpis</Button>} />
     <p className="text-xs text-zinc-500">Przykładowe dane. Zmiany zapisują się tylko w tej przeglądarce.</p>
     <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
@@ -108,21 +112,20 @@ export function PatternExample() {
     <ErrorMessage>{error || data.error}</ErrorMessage>
     {message && <p role="status" className="text-sm text-primary-800">{message}</p>}
     <p className="text-xs text-zinc-500" aria-live="polite">Wyniki: {filtered.length} z {items.length}</p>
-    {!!filtered.length && <Table.Card><Table aria-label="Przykładowe wpisy" className="table-fixed">
+    {groups.map(group => <CategorySection key={categoryKey(group.category)} title={group.category || "Bez kategorii"} count={group.items.length}>
+      <Table.Card><Table aria-label={`Wpisy: ${group.category || "Bez kategorii"}`} className="table-fixed">
       <Table.Header><Table.HeaderRow><Table.Head className="px-3 py-2">Nazwa</Table.Head>
-        <Table.Head className="hidden w-44 px-3 py-2 sm:table-cell">Kategoria</Table.Head>
         <Table.Head className="hidden w-36 px-3 py-2 sm:table-cell">Status</Table.Head>
         <Table.Head className="w-28 px-3 py-2 text-right">Akcje</Table.Head></Table.HeaderRow></Table.Header>
-      <Table.Body>{filtered.map(item => {
+      <Table.Body>{group.items.map(item => {
         const Thumbnail = item.icon === "headphones" ? Headphones : item.icon === "blocks" ? Blocks : item.icon === "watch" ? Watch : Package;
         return <Table.Row key={item.id}>
           <Table.PrimaryCell className="px-3 py-3"><div className="flex min-w-0 items-start gap-3">
             <span className="flex size-8 shrink-0 items-center justify-center rounded border border-zinc-200 bg-zinc-50 text-zinc-500"><Thumbnail aria-hidden className="size-4" /></span>
             <div className="min-w-0"><button className="text-left font-medium break-words text-zinc-900 hover:text-primary-700"
               onClick={() => setForm({ item })}>{item.title}</button>
-              <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-zinc-500 sm:hidden"><span>{item.category || "Bez kategorii"}</span><Badge tone={item.done ? "primary" : "muted"} size="xs">{item.done ? "Gotowe" : "Do zrobienia"}</Badge></div>
+              <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-zinc-500 sm:hidden"><Badge tone={item.done ? "primary" : "muted"} size="xs">{item.done ? "Gotowe" : "Do zrobienia"}</Badge></div>
             </div></div></Table.PrimaryCell>
-          <Table.Cell className="hidden px-3 py-3 break-words text-zinc-500 sm:table-cell">{item.category || "Bez kategorii"}</Table.Cell>
           <Table.Cell className="hidden px-3 py-3 sm:table-cell"><Badge tone={item.done ? "primary" : "muted"}>{item.done ? "Gotowe" : "Do zrobienia"}</Badge></Table.Cell>
           <Table.Cell className="px-2 py-2"><div className="flex justify-end">
             <IconButton label={`Edytuj: ${item.title}`} onClick={() => setForm({ item })}><Pencil className="size-4" /></IconButton>
@@ -134,7 +137,7 @@ export function PatternExample() {
           </div></Table.Cell>
         </Table.Row>;
       })}</Table.Body>
-    </Table></Table.Card>}
+    </Table></Table.Card></CategorySection>)}
     {!filtered.length && !data.error && <EmptyState>
       <p>{items.length ? "Brak wyników dla wybranych filtrów." : "Lista jest pusta. Dodaj pierwszy wpis."}</p>
       <Button className="mt-3" variant="secondary" onClick={items.length ? clearFilters : () => setForm({ item: null })}>{items.length ? "Wyczyść filtry" : "Dodaj pierwszy wpis"}</Button>
