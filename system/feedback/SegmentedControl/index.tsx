@@ -1,7 +1,7 @@
 "use client";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { Select } from "../../forms/Select";
 import { cn } from "../../lib/cn";
 import { Badge } from "../Badge";
 
@@ -83,26 +83,18 @@ export function SegmentedControl<T extends string>({
 
         {listed.length > 0 && (
           <div className="relative shrink-0">
-            <NativeSelect
+            <Select
               aria-label={collapsedLabel}
               value={listedActive ? value : ""}
-              onChange={(event) => onChange(event.target.value as T)}
-              className={cn(
-                "max-w-52 cursor-pointer appearance-none rounded-lg py-1.5 pl-3 pr-8 text-sm font-medium transition",
-                tone(listedActive),
-              )}
-            >
-              <NativeSelectOption value="" disabled>
-                {`${collapsedLabel} (${listed.length})`}
-              </NativeSelectOption>
-              {listed.map((option) => (
-                <NativeSelectOption key={option.value} value={option.value}>
-                  {option.count === undefined
-                    ? option.label
-                    : `${option.label} (${option.count})`}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              placeholder={`${collapsedLabel} (${listed.length})`}
+              onChange={(next) => onChange(next as T)}
+              options={listed.map(option => ({
+                value: option.value,
+                label: option.count === undefined ? option.label : `${option.label} (${option.count})`,
+              }))}
+              surface="white"
+              className="w-44 max-w-full"
+            />
 
           </div>
         )}

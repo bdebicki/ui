@@ -40,24 +40,24 @@ const PAGE_HEADERS: Record<
   SiteHeaderConfig & { breadcrumb: BreadcrumbTrail }
 > = {
   "/": {
-    breadcrumb: { root: BREADCRUMB_ROOT, category: "PAGES", segments: ["HOME"] },
-    title: "Hello World",
+    breadcrumb: { root: BREADCRUMB_ROOT, category: "WZORCE", segments: ["LISTA"] },
+    title: "Przykładowa lista",
   },
   "/about": {
     breadcrumb: {
       root: BREADCRUMB_ROOT,
-      category: "PAGES",
-      segments: ["ABOUT"],
+      category: "SZABLON",
+      segments: ["INFORMACJE"],
     },
-    title: "About",
+    title: "O szablonie",
   },
   "/settings": {
     breadcrumb: {
       root: BREADCRUMB_ROOT,
-      category: "SETTINGS",
-      segments: ["LAYOUT"],
+      category: "USTAWIENIA",
+      segments: ["UKŁAD"],
     },
-    title: "Layout",
+    title: "Układ strony",
   },
 };
 
@@ -144,13 +144,14 @@ export function SiteHeader() {
       <Container className="py-4">
         <PageHeader
           as="h1"
+          className="flex-wrap"
           size="lg"
           eyebrow={<Breadcrumb trail={config.breadcrumb} />}
           title={config.title}
           description={config.description}
           action={
             <div className="flex flex-wrap items-center justify-end gap-3">
-              <SavingIndicator saving={ctx?.saving ?? false} />
+              <SavingIndicator saving={ctx?.saving ?? false} className={ctx?.saving ? undefined : "hidden sm:inline"} />
               {config.action}
             </div>
           }

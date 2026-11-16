@@ -1,6 +1,8 @@
 import { Card, PageContainer } from "@/system";
+import { requirePageSession } from "@/lib/auth/server";
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  await requirePageSession("/about");
   return (
     <PageContainer>
       <Card size="lg">

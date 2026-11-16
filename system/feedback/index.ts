@@ -5,3 +5,4 @@ export { ErrorMessage } from "./ErrorMessage";
 export { LoadingState } from "./LoadingState";
 export { SavingIndicator } from "./SavingIndicator";
 export { SegmentedControl, type SegmentedOption } from "./SegmentedControl";
+export { ConfirmDialog } from "./ConfirmDialog";

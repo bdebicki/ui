@@ -26,17 +26,17 @@ export const NAV_ENTRIES: NavEntry[] = [
   {
     type: "group",
     id: "pages",
-    label: "Pages:",
+    label: "Przykłady:",
     items: [
       {
         id: "home",
-        label: "Home",
+        label: "Lista",
         href: "/",
         isActive: (pathname) => pathname === "/",
       },
       {
         id: "about",
-        label: "About",
+        label: "O szablonie",
         href: "/about",
         isActive: (pathname) => pathname.startsWith("/about"),
       },
@@ -45,7 +45,7 @@ export const NAV_ENTRIES: NavEntry[] = [
   {
     type: "link",
     id: "settings",
-    label: "Settings",
+    label: "Ustawienia",
     href: "/settings",
     isActive: (pathname) => pathname.startsWith("/settings"),
   },

@@ -11,7 +11,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "./dialog"
 
 function Command({
   className,
@@ -67,7 +67,9 @@ function CommandInput({
 }: React.ComponentProps<typeof CommandPrimitive.Input> & { bare?: boolean }) {
   if (bare) return (
     <CommandPrimitive.Input asChild data-slot="command-input" {...props}>
-      <input className={className} aria-expanded={props["aria-expanded"]} />
+      {/* cmdk supplies aria-controls through asChild composition. */}
+      {/* eslint-disable-next-line jsx-a11y/role-has-required-aria-props */}
+      <input role="combobox" className={className} aria-expanded={props["aria-expanded"]} />
     </CommandPrimitive.Input>
   )
 

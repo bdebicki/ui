@@ -1,5 +1,6 @@
 import { SetSiteHeader } from "@/components/layout";
 import { Card, PageContainer } from "@/system";
+import { requirePageSession } from "@/lib/auth/server";
 
 const LAYOUT_BITS = [
   {
@@ -16,7 +17,8 @@ const LAYOUT_BITS = [
   },
 ];
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  await requirePageSession("/settings");
   return (
     <PageContainer>
       <SetSiteHeader

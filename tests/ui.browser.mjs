@@ -2,6 +2,12 @@ import { chromium, expect } from "@playwright/test";
 import { spawn } from "node:child_process";
 import { mkdir, writeFile, rm } from "node:fs/promises";
 import { once } from "node:events";
+import { randomBytes } from "node:crypto";
+import { authChecks } from "./auth.browser.mjs";
+import { patternChecks } from "./patterns.browser.mjs";
+
+const testPassword = "test-only-password";
+const testEnv = { ...process.env, APP_PASSWORD: testPassword, SESSION_SECRET: randomBytes(32).toString("hex"), AUTH_COOKIE_NAME: "ui-test-session" };
 
 // Create a temporary route so test fixtures never ship with the application.
 const route = new URL("../app/ui-regression/", import.meta.url);
@@ -21,19 +27,23 @@ try {
   await build();
   const port = 3217;
   const base = `http://127.0.0.1:${port}`;
-  server = spawn(process.execPath, ["node_modules/next/dist/bin/next", "start", "--port", String(port)], { stdio: "pipe" });
+  server = spawn(process.execPath, ["node_modules/next/dist/bin/next", "start", "--hostname", "127.0.0.1", "--port", String(port)], { stdio: "pipe", env: testEnv });
   let logs = "";
   server.stdout.on("data", (data) => { logs += data; });
   server.stderr.on("data", (data) => { logs += data; });
   let ready = false;
   for (let attempt = 0; attempt < 120; attempt++) {
     if (server.exitCode !== null) throw new Error(logs);
-    try { if ((await fetch(`${base}/ui-regression`)).ok) { ready = true; break; } } catch {}
+    try { if ((await fetch(`${base}/login`)).ok) { ready = true; break; } } catch {}
     await new Promise((resolve) => setTimeout(resolve, 500));
   }
   if (!ready) throw new Error(`Preview did not start: ${logs}`);
   browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
+  await page.goto(`${base}/login?from=/ui-regression`);
+  await page.getByLabel("PIN lub hasło", { exact: true }).fill(testPassword);
+  await page.getByRole("button", { name: "Zaloguj się", exact: true }).click();
+  await expect(page).toHaveURL(`${base}/ui-regression`);
   const errors = [];
   page.on("pageerror", (error) => { errors.push(error.message); console.error(error.message); });
   page.on("console", (message) => { if (message.type() === "error") console.error(message.text()); });
@@ -122,7 +132,8 @@ try {
     await today.click();
     await expect(today).toHaveAttribute("aria-checked", "true");
     await page.getByRole("radio", { name: "Przypięte" }).click();
-    await page.getByRole("combobox", { name: "Więcej" }).selectOption("today");
+    await page.getByRole("combobox", { name: "Więcej" }).click();
+    await page.getByRole("option", { name: "Dzisiaj", exact: true }).click();
     await expect(today).toHaveAttribute("aria-checked", "true");
     const bottom = page.getByPlaceholder("Przy dolnej krawędzi");
     await bottom.scrollIntoViewIfNeeded();
@@ -143,6 +154,9 @@ try {
   expect(errors).toEqual([]);
   await page.screenshot({ path: "/tmp/ui-shadcn-migration.png", fullPage: true });
   console.log("All routes passed without browser errors.");
+  await patternChecks({ page, browser, base });
+  expect(errors).toEqual([]);
+  await authChecks({ browser, base, password: testPassword });
 } finally {
   await browser?.close();
   await rm(new URL("page.tsx", route), { force: true });

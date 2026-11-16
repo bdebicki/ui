@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NavBar, SiteHeader, SiteHeaderProvider } from "@/components/layout";
+import { LogoutButton } from "@/components/auth/LogoutButton";
+import { authentication } from "@/lib/auth/server";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -30,11 +32,12 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { authenticated, config } = await authentication();
   return (
     <html
       lang="pl"
@@ -42,8 +45,8 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col bg-zinc-50 text-zinc-900">
         <SiteHeaderProvider>
-          <NavBar />
-          <SiteHeader />
+          {authenticated && <NavBar action={config.mode === "enabled" ? <LogoutButton /> : undefined} />}
+          {authenticated && <SiteHeader />}
           <main className="flex flex-1 flex-col">{children}</main>
         </SiteHeaderProvider>
       </body>

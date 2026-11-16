@@ -11,6 +11,7 @@
     "start": "next start",
     "lint": "eslint",
     "knip": "knip",
+    "test": "node --experimental-strip-types --test tests/auth.test.mjs",
     "test:browser": "node tests/ui.browser.mjs"
   },
   "dependencies": {

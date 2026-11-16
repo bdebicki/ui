@@ -1,6 +1,8 @@
 export { AddButton } from "./AddButton";
 export { Button } from "./Button";
 export { CreatableSelect } from "./CreatableSelect";
+export { Select, type SelectOption, type SelectProps } from "./Select";
+export { FormDialog } from "./FormDialog";
 export { IconButton } from "./IconButton";
 export { InlineField } from "./InlineField";
 export { InlineForm } from "./InlineForm";

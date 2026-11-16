@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AddButton, Badge, Button, Card, CreatableSelect, EmptyState, IconButton, Input, NumberInput, SegmentedControl, Table, Textarea, ToggleButton } from "@/system";
+import { useState, useSyncExternalStore } from "react";
+import { AddButton, Badge, Button, Card, CreatableSelect, EmptyState, FormDialog, IconButton, Input, NumberInput, SegmentedControl, Table, Textarea, ToggleButton } from "@/system";
 
 import { Card as PrimitiveCard, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 
+const subscribe = () => () => {};
 export default function ComponentsFixture() {
-  const [ready, setReady] = useState(false);
-  useEffect(() => { setReady(true); }, []);
+  const ready = useSyncExternalStore(subscribe, () => true, () => false);
   const [text, setText] = useState("start");
   const [notes, setNotes] = useState("notes");
   const [number, setNumber] = useState(5);
@@ -16,6 +16,8 @@ export default function ComponentsFixture() {
   const [commit, setCommit] = useState("");
   const [active, setActive] = useState(false);
   const [segment, setSegment] = useState("all");
+  const [formOpen, setFormOpen] = useState(false);
+  const [formName, setFormName] = useState("");
   return (
     <div data-testid="fixture" data-ready={ready} className="space-y-4 p-6">
       <Card size="lg">
@@ -41,6 +43,14 @@ export default function ComponentsFixture() {
       <EmptyState>Brak wyników</EmptyState>
       <EmptyState variant="dashed">Dodaj pierwszy wpis</EmptyState>
       <AddButton>Dodaj</AddButton>
+      <Button onClick={() => { setFormName(""); setFormOpen(true); }}>Testuj formularz</Button>
+      {formOpen && <FormDialog open title="Formularz testowy" description="Przykład zapisu i obsługi błędu." dirty={!!formName} onClose={() => setFormOpen(false)}
+        onSubmit={async () => {
+          await new Promise(resolve => setTimeout(resolve, 600));
+          if (formName === "Błąd") throw new Error("Zapis nie powiódł się. Wpisane dane pozostają.");
+        }}>
+        <label htmlFor="fixture-name">Nazwa testowa</label><Input id="fixture-name" value={formName} onChange={event => setFormName(event.target.value)} />
+      </FormDialog>}
       <Table.Card><Table><thead><Table.HeaderRow><th>Nazwa</th></Table.HeaderRow></thead><tbody><Table.Row priority><Table.PrimaryCell priority sticky>Wyróżniony</Table.PrimaryCell></Table.Row></tbody></Table></Table.Card>
       <Button onClick={() => document.getElementById("bottom-choice")?.scrollIntoView()}>Na dół</Button>
       <div className="h-[100vh]" />
